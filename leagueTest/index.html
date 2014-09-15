@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+ <head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="cyborg/css/cyborg.min.css" class="uib-framework-theme">
+  <link rel="stylesheet" type="text/css" href="css/index_main.less.css" class="main-less">
+  <title>Your New Application</title>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+  <style type="text/css">
+   /* Prevent copy paste for all elements except text fields */
+   		*  { -webkit-user-select:none; -webkit-tap-highlight-color:rgba(255, 255, 255, 0); }
+   		input, textarea  { -webkit-user-select:text; }
+        body {
+        color:#7cf500;
+        font-family:Arial;
+        font-size:12pt;
+        background-image:url('http://mp1st.com/wp-content/uploads/2014/01/tumblr_static_22924_league_of_legends1.jpg');
+    }
+      .search_result
+      {
+          background-color:#ff0000;  
+      }
+        .search_result1
+      {
+          background-color:#ff0000;  
+      }
+         .search_result3
+      {
+          background-color:#ff0000;  
+      }
+        .search_result2
+      {
+          background-color:#ff0000;  
+      }
+     
+      
+  </style>
+  <script src="intelxdk.js"></script>
+  <script type="text/javascript">
+   /* This code is used to run as soon as Intel activates */
+   		var onDeviceReady=function(){
+   		//hide splash screen
+   		intel.xdk.device.hideSplashScreen();
+   		};
+   		document.addEventListener("intel.xdk.device.ready",onDeviceReady,false);
+  </script>
+  <script src="jquery-2.1.0.min.js"></script>
+  <script src="api.js"></script>
+ </head>
+
+ <body>
+  <!-- content goes here-->
+  <div class="uwrap">
+   <div class="upage" id="mainpage">
+    <div class="upage-outer">
+     <div class="upage-content" id="mainsub">
+
+      <div class="grid grid-pad urow uib_row_1 row-height-1" data-uib="layout/row" data-ver="0">
+       <div class="col uib_col_1 col-0_12-12" data-uib="layout/col" data-ver="0">
+        <div class="widget-container content-area vertical-col">
+
+         <div class="table-thing widget uib_w_2 d-margins" data-uib="twitter%20bootstrap/input" data-ver="0">
+          <label class="narrow-control label-inline">Name</label>
+          <input class="wide-control form-control" type="text" placeholder="Summoner Name" id="summName">
+         </div>
+         <div class="table-thing widget uib_w_3 d-margins" data-uib="twitter%20bootstrap/input" data-ver="0">
+          <label class="narrow-control label-inline">phone no.</label>
+          <input class="wide-control form-control" type="text" placeholder="Enter no. with +1" id="phNo">
+         </div>
+
+         <span class="uib_shim"></span>
+        </div>
+
+
+        <div class="grid grid-pad urow uib_row_5 row-height-5" data-uib="layout/row" data-ver="0">
+         <div class="col uib_col_6 col-0_12-12" data-uib="layout/col" data-ver="0">
+          <div class="widget-container content-area vertical-col">
+           <button type="button" class="btn widget uib_w_1 d-margins btn-default" data-uib="twitter%20bootstrap/button" data-ver="0"
+           onclick="search();"><i class="glyphicon button-icon-left" data-position="left"></i>Get Info</button><span class="uib_shim"></span>
+          </div>
+         </div>
+         <span class="uib_shim"></span>
+        </div>
+       </div>
+       <span class="uib_shim"></span>
+        <!--  
+       <div class="search_result"></div>
+      </div>
+
+      <div class="search_result1"></div>
+     </div>
+         <div class="search_result3"></div>
+    </div>
+       -->
+     <div class="search_result2"></div>
+    </div>
+
+       
+
+
+    <div class="grid grid-pad urow uib_row_4 row-height-4" data-uib="layout/row" data-ver="0">
+
+
+     <div class="col uib_col_3 col-0" data-uib="layout/col" data-ver="0">
+      <div class="widget-container content-area vertical-col">
+       <span class="uib_shim"></span>
+      </div>
+     </div><span class="uib_shim"></span>
+    </div>
+   </div>
+  </div>
+  <!-- /upage-content -->
+
+
+  <!-- /upage-outer -->
+
+
+  <!-- /upage -->
+
+
+  <!-- /uwrap -->
+ </body>
+
+</html>

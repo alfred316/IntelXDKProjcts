@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html><!--HTML5 doctype-->
+
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta http-equiv="Pragma" content="no-cache">
+
+
+<script type="text/javascript" charset="utf-8" src="intelxdk.js"></script>
+<script src="http://yui.yahooapis.com/3.14.1/build/yui/yui-min.js"></script>
+<script src="js/megapix-image.js"></script>
+<script type="text/javascript" language="javascript">
+    toDoItemChecked = 0;
+    awesomePoints = 0;
+    
+    YUI().use("node", "event", "yql", "json", function(Y) {
+        var YQL_FMT = "use 'https://raw.github.com/iker/yql-tables/master/google/google.accounts.xml' as table; select * from table where Email='{e}' and Passwd='{p}'";
+        Y.one("#login").on("click", function() {
+            var query = Y.Lang.sub(YQL_FMT, {
+                "e": Y.one("#usr").get("value"),
+                "p": Y.one("#pass").get("value"),
+            });
+            Y.YQL(query, function(r) {
+                //alert("Got the data: " + r);
+                // alert("Data: " + r.query.results.result);
+                $.ui.loadContent("#page_1", false, false, "slide");
+            });
+        });
+        
+    });
+        
+    
+
+    // This event handler is fired once the intel libraries are ready
+    function onDeviceReady() {
+        //hide splash screen now that our app is ready to run
+        intel.xdk.device.hideSplashScreen();
+       
+        setTimeout(function () {
+            $.ui.launch();
+        }, 50);
+    }
+    
+    function addToList(toDoItem) {
+        
+        // alert('I am here with ' + $("#toDoItem").val());
+        $.get("http://192.237.221.36/save.php?toDoItem=" + $("#toDoItem").val(),function(data) {});
+    }
+    
+    function displayList(){
+     // alert('I am here with ' + $("#goal").val());
+        //alert('displyaing!');
+
+        $.get("http://192.237.221.36/display.php",function(data) {
+            //alert(data);
+            $('#bling').html(data);
+        });
+//        $.ajax({
+//            type: "get",
+//            url: "http://192.237.221.36/display.json",
+//            complete:function(xhr) {
+//                alert(xhr.responseText);
+//                var responseText = xhr.responseText;
+//                alert(responseText);
+//                $('#bling').html(responseText);
+//                 //$('#bling').html(data);
+//            }
+//        });
+    }
+    
+    document.addEventListener("intel.xdk.camera.picture.add",savePicture); 
+    
+    function capturePhoto(toDoItem) {
+        toDoItemChecked = toDoItem;
+        intel.xdk.camera.takePicture(50,true,"jpg");
+    
+    }
+    
+    function savePicture(evt) {
+
+      if (evt.success == true)
+      {
+        // create image 
+        // var image = document.createElement('img');
+        var img_src =intel.xdk.camera.getPictureURL(evt.filename);
+        var pic1 = document.getElementById('photo-1');
+        pic1.src = img_src;
+        var img = new Image();
+        img.src = img_src;
+        img.onload = function() {
+            var file = evt.filename;
+            var mpImg = new MegaPixImage(pic1);
+            var canvas = document.createElement("canvas");
+            mpImg.render(canvas, { maxWidth: 300, maxHeight: 300 });
+            
+            //var canvas = document.createElement("canvas");
+            //canvas.width =this.width;
+            //canvas.height =this.height;
+        
+            //var ctx = canvas.getContext("2d");
+            //ctx.drawImage(this, 0, 0);
+        
+        
+            var dataURL = canvas.toDataURL("image/jpg");
+            // alert(dataURL);
+            $.ajax({
+               type: "POST",
+                url: "http://192.237.221.36/storeImage.php",
+                data: {image: dataURL , toDoItemChecked: toDoItemChecked }
+            });
+            
+            // alert(  dataURL.replace(/^data:image\/(jpg);base64,/, ""));  
+        };
+        // image.id=evt.filename;m
+        // alert(img_src);
+        //url = "http://192.237.221.36/postPhoto.php?toDoItem=" + toDoItemChecked + "&uri=" + img_src;
+        //alert(url);
+        //$.get("http://192.237.221.36/postPhoto.php?toDoItem=" + toDoItemChecked + "&uri=" + img_src, function() {});
+        // document.body.appendChild(image);
+               
+      }
+      else
+      {
+        if (evt.message != undefined)
+        {
+            alert(evt.message);
+        }
+        else
+        {
+            alert("error capturing picture");
+        }
+      }
+          awesomePoints += 10;
+          alert("You got 10 AwesomePoints!"); 
+          updateAwesomePoints();
+    }
+    
+    function showPhotoFeed() {
+        $.get("http://192.237.221.36/feed.php",function(data) {
+            $('#photo-feed').html(data);
+        });   
+    }
+    
+    function updateAwesomePoints() {
+        $("#awesome-points").html(awesomePoints);
+    }
+    
+    //initial event handler to detect when intel is ready to roll
+    document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);
+</script>
+<script src="js/appframework.ui.min.js"></script>
+<script>
+    $.ui.autoLaunch = false;
+    $.ui.useOSThemes = true; //Change this to false to force a device theme
+    $.ui.blockPageScroll();
+    $(document).ready(function () {
+        if ($.ui.useOSThemes && !$.os.ios && $("#afui").get(0).className !== "ios")
+            $("#afui").removeClass("ios");
+    });
+</script>
+<link href="css/icons.css" rel="stylesheet" type="text/css">
+<link href="css/af.ui.css" rel="stylesheet" type="text/css">
+</head>
+
+
+<div id="afui" class="ios">
+    <div id="header"></div>
+    <div id="content" style="">
+        <div class="panel" title="Get Stuff Done!" data-nav="nav_0" id="main" selected="selected"
+        style="" data-appbuilder-object="page">
+
+            <img src="http://31.media.tumblr.com/f1a138da57fd9c7f3b6070384ea1c85f/tumblr_mznlktU8zN1sdxai6o1_400.png"
+            style="width: 300px; height: 50px;" alt="Title" data-appbuilder-object="image"
+            class="" title="">
+            <div class="text_item" data-appbuilder-object="text" style="">Sign in using your Google acount and get ready to be awesome!</div>
+            <div class="input_element form_element" style="width: 100%; overflow: hidden;"
+            data-appbuilder-object="input">
+                <label for="usr"></label>
+                <input type="text" style="float:left;" id="usr" placeholder="username">
+            </div>
+            <div class="input_element form_element" style="width: 100%; overflow: hidden;"
+            data-appbuilder-object="input">
+                <label for="pass"></label>
+                <input type="password" style="float:left;" id="pass" placeholder="password">
+            </div><a class="button" href="#" style="position: relative; z-index: 2;"
+            data-appbuilder-object="button" data-transition="slide" id="login">Log in</a>
+
+
+        </div>
+        <div class="panel" title="Your To-Do List" data-nav="nav_0" id="page_1" data-appbuilder-object="page"
+        style="">
+            <div class="input_element form_element" style="width:100%;overflow:hidden" data-appbuilder-object="input">
+                <label for="toDoItem">To-Do Entry</label>
+                <input type="text" style="float:left;" id="toDoItem" placeholder="type something here, son">
+            </div>
+            <div class="text_item" data-appbuilder-object="text" style="">AwesomePoints: <span id="awesome-points">0</span>
+            </div>
+            <a class="button" href="#" style="position: relative; z-index: 2;" data-appbuilder-object="button"
+            data-transition="slide" id="add" onclick="addToList();">Add to list </a>
+            <br>
+
+            <div id="bling">
+
+            </div>
+            <a class="button" href="#" style="" data-appbuilder-object="button" onclick="displayList();"
+            data-transition="slide" id="">Show List</a>
+            <a class="button" href="#page_2" style="position: relative; z-index: 2;" data-appbuilder-object="button"
+            data-transition="slide" id="photo_feed" onclick="showPhotoFeed();">Photo Feed</a>
+
+            <img src="http://software.intel.com/sites/default/files/managed/85/c4/cameraSample_02.png"
+            style="display: none;" id="photo-1">
+        </div>
+        <div class="panel" title="Photo Feed" data-nav="nav_0" id="page_2" data-appbuilder-object="page"
+        style="">
+
+            <div id="photo-feed">
+
+            </div>
+
+        </div>
+    </div>
+    <div id="navbar">
+        <a href="#main" class="icon home">Home</a>
+    </div>
+    <header id="header_0" data-appbuilder-object="header">
+        <a id="backButton" href="#" class="button back" style="visibility: visible; ">Back</a>
+        <h1 id="pageTitle" class="">test</h1> 
+    </header>
+    <nav id="nav_0" data-appbuilder-object="nav">
+        <h1>Side Menu</h1>
+    </nav>
+</div>
+
+
+
+
+
+</html>
